@@ -7,7 +7,7 @@
 			"Latest"	"1.5.2F-R2-dev-git208"
 		}
 		
-		"Notes"	"More info @ github.com/Sarabveer/SourceBans-Fork. Changes in 1.5.2F-R2-dev-git20:"
+		"Notes"	"More info @ github.com/Sarabveer/SourceBans-Fork. Changes in 1.5.2F-R2-dev-git208:"
 		"Notes"	"Added Updater Support"
 	}
 	
