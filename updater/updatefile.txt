@@ -26,7 +26,12 @@
 		"Source"	"Path_SM/scripting/sourcecomms.sp"
 		"Source"	"Path_SM/scripting/SourceSleuth.sp"
 		"Source"	"Path_SM/scripting/sbchecker.sp"
+		"Source"	"Path_SM/scripting/admin-flatfile.sp"
 		"Source"	"Path_SM/scripting/include/sourcebans.inc"
 		"Source"	"Path_SM/scripting/include/sourcecomms.inc"
+		"Source"	"Path_SM/scripting/admin-flatfile/admin-users_fix.sp"
+		"Source"	"Path_SM/scripting/admin-flatfile/admin-overrides_fix.sp"
+		"Source"	"Path_SM/scripting/admin-flatfile/admin-groups_fix.sp"
+		"Source"	"Path_SM/scripting/admin-flatfile/admin-simple_fix.sp"
 	}
 }
