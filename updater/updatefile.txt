@@ -17,6 +17,7 @@
 		"Plugin"	"Path_SM/plugins/sourcecomms.smx"
 		"Plugin"	"Path_SM/plugins/SourceSleuth.smx"
 		"Plugin"	"Path_SM/plugins/sbchecker.smx"
+		"Plugin"	"Path_SM/plugins/admin-flatfile.smx"
 		"Plugin"	"Path_SM/translations/sourcebans.phrases.txt"
 		"Plugin"	"Path_SM/translations/sourcecomms.phrases.txt"
 		"Plugin"	"Path_SM/translations/sourcesleuth.phrases.txt"
