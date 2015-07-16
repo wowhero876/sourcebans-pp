@@ -38,13 +38,15 @@
 
 //- Handles -//
 new Handle:hDatabase = INVALID_HANDLE;
-new Handle:g_cVar_actions = INVALID_HANDLE;
-new Handle:g_cVar_banduration = INVALID_HANDLE;
-new Handle:g_cVar_sbprefix = INVALID_HANDLE;
-new Handle:g_cVar_bansAllowed = INVALID_HANDLE;
-new Handle:g_cVar_bantype = INVALID_HANDLE;
-new Handle:g_cVar_bypass = INVALID_HANDLE;
 new Handle:g_hAllowedArray = INVALID_HANDLE;
+
+//- ConVars -//
+ConVar g_cVar_actions;
+ConVar g_cVar_banduration;
+ConVar g_cVar_sbprefix;
+ConVar g_cVar_bansAllowed;
+ConVar g_cVar_bantype;
+ConVar g_cVar_bypass;
 
 //- Bools -//
 new bool:CanUseSourcebans = false;
@@ -84,10 +86,7 @@ public OnPluginStart()
 
 public OnAllPluginsLoaded()
 {
-	if (LibraryExists("sourcebans"))
-	{
-		CanUseSourcebans = true;
-	}
+	CanUseSourcebans = LibraryExists("sourcebans");
 }
 
 public OnLibraryAdded(const String:name[])
@@ -141,7 +140,7 @@ public OnClientPostAdminCheck(client)
 		new String:steamid[32];
 		GetClientAuthId(client, AuthId_Steam2, steamid, sizeof(steamid));
 		
-		if (GetConVarBool(g_cVar_bypass) && CheckCommandAccess(client, "sleuth_admin", ADMFLAG_BAN, false)) 
+		if (g_cVar_bypass.BoolValue && CheckCommandAccess(client, "sleuth_admin", ADMFLAG_BAN, false)) 
 		{
 			return;
 		}
@@ -150,19 +149,13 @@ public OnClientPostAdminCheck(client)
 		{
 			new String:IP[32], String:Prefix[64];
 			GetClientIP(client, IP, sizeof(IP));
-			GetConVarString(g_cVar_sbprefix, Prefix, sizeof(Prefix));
+			
+			g_cVar_sbprefix.GetString(Prefix, sizeof(Prefix));
 			
 			new String:query[1024];
 			
-			if(GetConVarInt(g_cVar_bantype) == 0)
-			{
-				FormatEx(query, sizeof(query),  "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d", Prefix, IP, GetTime());
-			}
-			else
-			{
-				FormatEx(query, sizeof(query),  "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND length='0'", Prefix, IP);
-			}
-			
+			FormatEx(query, sizeof(query),  "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d", Prefix, IP, g_cVar_bantype.IntValue == 0 ? GetTime() : 0);
+
 			new Handle:datapack = CreateDataPack();
 
 			WritePackCell(datapack, GetClientUserId(client));
@@ -178,7 +171,7 @@ public OnClientPostAdminCheck(client)
 public SQL_CheckHim(Handle:owner, Handle:hndl, const String:error[], any:datapack)
 {
 	new client;
-	new String:steamid[32], String:IP[32], String:Reason[255], String:text[255];
+	decl String:steamid[32], String:IP[32], String:Reason[255];
 	
 	if(datapack != INVALID_HANDLE)
 	{
@@ -197,9 +190,9 @@ public SQL_CheckHim(Handle:owner, Handle:hndl, const String:error[], any:datapac
 	{
 		new TotalBans = SQL_GetRowCount(hndl);
 		
-		if(TotalBans > GetConVarInt(g_cVar_bansAllowed))
+		if(TotalBans > g_cVar_bansAllowed.IntValue)
 		{
-			switch (GetConVarInt(g_cVar_actions))
+			switch (g_cVar_actions.IntValue)
 			{
 				case LENGTH_ORIGINAL:
 				{
@@ -212,7 +205,7 @@ public SQL_CheckHim(Handle:owner, Handle:hndl, const String:error[], any:datapac
 				}
 				case LENGTH_CUSTOM:
 				{
-					new time = GetConVarInt(g_cVar_banduration);
+					new time = g_cVar_banduration.IntValue;
 
 					Format(Reason, sizeof(Reason), "[SourceSleuth] %t", "sourcesleuth_banreason");
 					
@@ -229,8 +222,8 @@ public SQL_CheckHim(Handle:owner, Handle:hndl, const String:error[], any:datapac
 				}
 				case LENGTH_NOTIFY:
 				{
-					Format(text, sizeof(text), "[SourceSleuth] %t", "sourcesleuth_admintext",client, steamid, IP);
-					PrintToAdmins("%s", text);
+					/* Notify Admins when a client with an ip on the bans list connects */
+					PrintToAdmins("[SourceSleuth] %t", "sourcesleuth_admintext",client, steamid, IP);
 				}
 			}
 		}

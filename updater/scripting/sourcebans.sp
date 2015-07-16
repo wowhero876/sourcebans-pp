@@ -30,11 +30,13 @@
 
 #undef REQUIRE_PLUGIN
 #include <adminmenu>
-#include <updater>
+#tryinclude <updater>
 
-#define SB_VERSION "1.5.2F-R2-dev-git215"
+#define SB_VERSION "1.5.2F-R2-dev-git230"
 
+#if defined _updater_included
 #define UPDATE_URL "https://sarabveer.github.io/SourceBans-Fork/updater/updatefile.txt"
+#endif
 
 //GLOBAL DEFINES
 #define YELLOW				0x01
@@ -44,6 +46,8 @@
 
 #define DISABLE_ADDBAN		1
 #define DISABLE_UNBAN		2
+
+#define FLAG_LETTERS_SIZE 26
 
 //#define DEBUG
 
@@ -76,7 +80,7 @@ new bool:loadAdmins;
 new bool:loadGroups;
 new bool:loadOverrides;
 new curLoading=0;
-new AdminFlag:g_FlagLetters[26];
+new AdminFlag:g_FlagLetters[FLAG_LETTERS_SIZE];
 
 /* Admin KeyValues */
 new String:groupsLoc[128];
@@ -187,28 +191,7 @@ public OnPluginStart()
 		SetMenuExitBackButton(HackingMenuHandle, true);
 	}
 	
-	g_FlagLetters['a'-'a'] = Admin_Reservation;
-	g_FlagLetters['b'-'a'] = Admin_Generic;
-	g_FlagLetters['c'-'a'] = Admin_Kick;
-	g_FlagLetters['d'-'a'] = Admin_Ban;
-	g_FlagLetters['e'-'a'] = Admin_Unban;
-	g_FlagLetters['f'-'a'] = Admin_Slay;
-	g_FlagLetters['g'-'a'] = Admin_Changemap;
-	g_FlagLetters['h'-'a'] = Admin_Convars;
-	g_FlagLetters['i'-'a'] = Admin_Config;
-	g_FlagLetters['j'-'a'] = Admin_Chat;
-	g_FlagLetters['k'-'a'] = Admin_Vote;
-	g_FlagLetters['l'-'a'] = Admin_Password;
-	g_FlagLetters['m'-'a'] = Admin_RCON;
-	g_FlagLetters['n'-'a'] = Admin_Cheats;
-	g_FlagLetters['o'-'a'] = Admin_Custom1;
-	g_FlagLetters['p'-'a'] = Admin_Custom2;
-	g_FlagLetters['q'-'a'] = Admin_Custom3;
-	g_FlagLetters['r'-'a'] = Admin_Custom4;
-	g_FlagLetters['s'-'a'] = Admin_Custom5;
-	g_FlagLetters['t'-'a'] = Admin_Custom6;
-	g_FlagLetters['z'-'a'] = Admin_Root;
-	
+	g_FlagLetters = CreateFlagLetters();
 	
 	BuildPath(Path_SM, logFile, sizeof(logFile), "logs/sourcebans.log");
 	g_bConnecting = true;
@@ -254,12 +237,15 @@ public OnPluginStart()
 		}
 	}
 	
+	#if defined _updater_included
 	if (LibraryExists("updater"))
-    {
-        Updater_AddPlugin(UPDATE_URL);
-    }
+    	{
+        	Updater_AddPlugin(UPDATE_URL);
+    	}
+    	#endif
 }
 
+#if defined _updater_included
 public OnLibraryAdded(const String:name[])
 {
     if (StrEqual(name, "updater"))
@@ -267,6 +253,7 @@ public OnLibraryAdded(const String:name[])
         Updater_AddPlugin(UPDATE_URL);
     }
 }
+#endif
 
 public OnAllPluginsLoaded()
 {
@@ -2524,6 +2511,35 @@ stock ParseBackupConfig_Overrides()
 	}
 	while(KvGotoNextKey(hKV));
 	CloseHandle(hKV);
+}
+
+stock AdminFlag:CreateFlagLetters()
+{
+	new AdminFlag:FlagLetters[FLAG_LETTERS_SIZE];
+	
+	FlagLetters['a'-'a'] = Admin_Reservation;
+	FlagLetters['b'-'a'] = Admin_Generic;
+	FlagLetters['c'-'a'] = Admin_Kick;
+	FlagLetters['d'-'a'] = Admin_Ban;
+	FlagLetters['e'-'a'] = Admin_Unban;
+	FlagLetters['f'-'a'] = Admin_Slay;
+	FlagLetters['g'-'a'] = Admin_Changemap;
+	FlagLetters['h'-'a'] = Admin_Convars;
+	FlagLetters['i'-'a'] = Admin_Config;
+	FlagLetters['j'-'a'] = Admin_Chat;
+	FlagLetters['k'-'a'] = Admin_Vote;
+	FlagLetters['l'-'a'] = Admin_Password;
+	FlagLetters['m'-'a'] = Admin_RCON;
+	FlagLetters['n'-'a'] = Admin_Cheats;
+	FlagLetters['o'-'a'] = Admin_Custom1;
+	FlagLetters['p'-'a'] = Admin_Custom2;
+	FlagLetters['q'-'a'] = Admin_Custom3;
+	FlagLetters['r'-'a'] = Admin_Custom4;
+	FlagLetters['s'-'a'] = Admin_Custom5;
+	FlagLetters['t'-'a'] = Admin_Custom6;
+	FlagLetters['z'-'a'] = Admin_Root;
+	
+	return FlagLetters;
 }
 
 //Yarr!

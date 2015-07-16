@@ -4,10 +4,10 @@
 	{
 		"Version"
 		{
-			"Latest"	"1.5.2F-R2-dev-git215"
+			"Latest"	"1.5.2F-R2-dev-git230"
 		}
 		
-		"Notes"	"More info @ github.com/Sarabveer/SourceBans-Fork. Changes in 1.5.2F-R2-dev-git215:"
+		"Notes"	"More info @ github.com/Sarabveer/SourceBans-Fork. Changes in 1.5.2F-R2-dev-git230:"
 		"Notes"	"Bug Fixes"
 	}
 	
@@ -17,7 +17,6 @@
 		"Plugin"	"Path_SM/plugins/sourcecomms.smx"
 		"Plugin"	"Path_SM/plugins/SourceSleuth.smx"
 		"Plugin"	"Path_SM/plugins/sbchecker.smx"
-		"Plugin"	"Path_SM/plugins/admin-flatfile.smx"
 		"Plugin"	"Path_SM/translations/sourcebans.phrases.txt"
 		"Plugin"	"Path_SM/translations/sourcecomms.phrases.txt"
 		"Plugin"	"Path_SM/translations/sourcesleuth.phrases.txt"
@@ -26,12 +25,7 @@
 		"Source"	"Path_SM/scripting/sourcecomms.sp"
 		"Source"	"Path_SM/scripting/SourceSleuth.sp"
 		"Source"	"Path_SM/scripting/sbchecker.sp"
-		"Source"	"Path_SM/scripting/admin-flatfile.sp"
 		"Source"	"Path_SM/scripting/include/sourcebans.inc"
 		"Source"	"Path_SM/scripting/include/sourcecomms.inc"
-		"Source"	"Path_SM/scripting/admin-flatfile/admin-users_fix.sp"
-		"Source"	"Path_SM/scripting/admin-flatfile/admin-overrides_fix.sp"
-		"Source"	"Path_SM/scripting/admin-flatfile/admin-groups_fix.sp"
-		"Source"	"Path_SM/scripting/admin-flatfile/admin-simple_fix.sp"
 	}
 }
