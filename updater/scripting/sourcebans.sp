@@ -32,7 +32,7 @@
 #include <adminmenu>
 #include <updater>
 
-#define SB_VERSION "1.5.2F-R2-dev-git208"
+#define SB_VERSION "1.5.2F-R2-dev-git215"
 
 #define UPDATE_URL "https://sarabveer.github.io/SourceBans-Fork/updater/updatefile.txt"
 
