@@ -4,11 +4,11 @@
 	{
 		"Version"
 		{
-			"Latest"	"1.5.2F-R2-dev-git230"
+			"Latest"	"1.5.2F"
 		}
 		
-		"Notes"	"More info @ github.com/Sarabveer/SourceBans-Fork. Changes in 1.5.2F-R2-dev-git230:"
-		"Notes"	"Bug Fixes"
+		"Notes"	"More info @ github.com/Sarabveer/SourceBans-Fork. Changes in 1.5.2F:"
+		"Notes"	"Bug Fixes for SM 1.7"
 	}
 	
 	"Files"

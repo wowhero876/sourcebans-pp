@@ -1,21 +1,21 @@
 // *************************************************************************
-//  This file is part of SourceBans-Fork.
+//  This file is part of SourceBans (FORK).
 //
 //  Copyright (C) 2014-2015 Sarabveer Singh <sarabveer@sarabveer.me>
 //  
-//  SourceBans-Fork is free software: you can redistribute it and/or modify
+//  SourceBans (FORK) is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Affero General Public License as published by
 //  the Free Software Foundation, per version 3 of the License.
 //  
-//  SourceBans-Fork is distributed in the hope that it will be useful,
+//  SourceBans (FORK) is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //  
 //  You should have received a copy of the GNU Affero General Public License
-//  along with SourceBans-Fork. If not, see <http://www.gnu.org/licenses/>.
+//  along with SourceBans (FORK).  If not, see <http://www.gnu.org/licenses/>.
 //
-//  This file incorporates work covered by the following copyright(s):   
+//  This file incorporates work covered by the following copyright:  
 //
 //   SourceSleuth 1.3 fix
 //   Copyright (C) 2013-2015 ecca
@@ -29,24 +29,17 @@
 #undef REQUIRE_PLUGIN
 #include <sourcebans>
 
-#define PLUGIN_VERSION "SBF-1.5.2F-R2-dev"
-
-#define LENGTH_ORIGINAL 1
-#define LENGTH_CUSTOM 2
-#define LENGTH_DOUBLE 3
-#define LENGTH_NOTIFY 4
+#define PLUGIN_VERSION "SB-1.5.2F"
 
 //- Handles -//
 new Handle:hDatabase = INVALID_HANDLE;
+new Handle:g_cVar_actions = INVALID_HANDLE;
+new Handle:g_cVar_banduration = INVALID_HANDLE;
+new Handle:g_cVar_sbprefix = INVALID_HANDLE;
+new Handle:g_cVar_bansAllowed = INVALID_HANDLE;
+new Handle:g_cVar_bantype = INVALID_HANDLE;
+new Handle:g_cVar_bypass = INVALID_HANDLE;
 new Handle:g_hAllowedArray = INVALID_HANDLE;
-
-//- ConVars -//
-ConVar g_cVar_actions;
-ConVar g_cVar_banduration;
-ConVar g_cVar_sbprefix;
-ConVar g_cVar_bansAllowed;
-ConVar g_cVar_bantype;
-ConVar g_cVar_bypass;
 
 //- Bools -//
 new bool:CanUseSourcebans = false;
@@ -86,7 +79,10 @@ public OnPluginStart()
 
 public OnAllPluginsLoaded()
 {
-	CanUseSourcebans = LibraryExists("sourcebans");
+	if (LibraryExists("sourcebans"))
+	{
+		CanUseSourcebans = true;
+	}
 }
 
 public OnLibraryAdded(const String:name[])
@@ -140,7 +136,7 @@ public OnClientPostAdminCheck(client)
 		new String:steamid[32];
 		GetClientAuthId(client, AuthId_Steam2, steamid, sizeof(steamid));
 		
-		if (g_cVar_bypass.BoolValue && CheckCommandAccess(client, "sleuth_admin", ADMFLAG_BAN, false)) 
+		if (GetConVarBool(g_cVar_bypass) && CheckCommandAccess(client, "sleuth_admin", ADMFLAG_BAN, false)) 
 		{
 			return;
 		}
@@ -149,13 +145,19 @@ public OnClientPostAdminCheck(client)
 		{
 			new String:IP[32], String:Prefix[64];
 			GetClientIP(client, IP, sizeof(IP));
-			
-			g_cVar_sbprefix.GetString(Prefix, sizeof(Prefix));
+			GetConVarString(g_cVar_sbprefix, Prefix, sizeof(Prefix));
 			
 			new String:query[1024];
 			
-			FormatEx(query, sizeof(query),  "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d", Prefix, IP, g_cVar_bantype.IntValue == 0 ? GetTime() : 0);
-
+			if(GetConVarInt(g_cVar_bantype) == 0)
+			{
+				FormatEx(query, sizeof(query),  "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d", Prefix, IP, GetTime());
+			}
+			else
+			{
+				FormatEx(query, sizeof(query),  "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND length='0'", Prefix, IP);
+			}
+			
 			new Handle:datapack = CreateDataPack();
 
 			WritePackCell(datapack, GetClientUserId(client));
@@ -171,7 +173,7 @@ public OnClientPostAdminCheck(client)
 public SQL_CheckHim(Handle:owner, Handle:hndl, const String:error[], any:datapack)
 {
 	new client;
-	decl String:steamid[32], String:IP[32], String:Reason[255];
+	new String:steamid[32], String:IP[32], String:Reason[255], String:text[255];
 	
 	if(datapack != INVALID_HANDLE)
 	{
@@ -190,11 +192,11 @@ public SQL_CheckHim(Handle:owner, Handle:hndl, const String:error[], any:datapac
 	{
 		new TotalBans = SQL_GetRowCount(hndl);
 		
-		if(TotalBans > g_cVar_bansAllowed.IntValue)
+		if(TotalBans > GetConVarInt(g_cVar_bansAllowed))
 		{
-			switch (g_cVar_actions.IntValue)
+			switch (GetConVarInt(g_cVar_actions))
 			{
-				case LENGTH_ORIGINAL:
+				case 1:
 				{
 					new length = SQL_FetchInt(hndl, 6);
 					new time = length*60;
@@ -203,15 +205,15 @@ public SQL_CheckHim(Handle:owner, Handle:hndl, const String:error[], any:datapac
 					
 					SBBanPlayer(0, client, time, Reason);
 				}
-				case LENGTH_CUSTOM:
+				case 2:
 				{
-					new time = g_cVar_banduration.IntValue;
+					new time = GetConVarInt(g_cVar_banduration);
 
 					Format(Reason, sizeof(Reason), "[SourceSleuth] %t", "sourcesleuth_banreason");
 					
 					SBBanPlayer(0, client, time, Reason);
 				}
-				case LENGTH_DOUBLE:
+				case 3:
 				{
 					new length = SQL_FetchInt(hndl, 6);
 					new time = length/60*2;
@@ -220,10 +222,10 @@ public SQL_CheckHim(Handle:owner, Handle:hndl, const String:error[], any:datapac
 					
 					SBBanPlayer(0, client, time, Reason);
 				}
-				case LENGTH_NOTIFY:
+				case 4:
 				{
-					/* Notify Admins when a client with an ip on the bans list connects */
-					PrintToAdmins("[SourceSleuth] %t", "sourcesleuth_admintext",client, steamid, IP);
+					Format(text, sizeof(text), "[SourceSleuth] %t", "sourcesleuth_admintext",client, steamid, IP);
+					PrintToAdmins("%s", text);
 				}
 			}
 		}

@@ -1,21 +1,21 @@
 // *************************************************************************
-//  This file is part of SourceBans-Fork.
+//  This file is part of SourceBans (FORK).
 //
 //  Copyright (C) 2014-2015 Sarabveer Singh <sarabveer@sarabveer.me>
 //  
-//  SourceBans-Fork is free software: you can redistribute it and/or modify
+//  SourceBans (FORK) is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Affero General Public License as published by
 //  the Free Software Foundation, per version 3 of the License.
 //  
-//  SourceBans-Fork is distributed in the hope that it will be useful,
+//  SourceBans (FORK) is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //  
 //  You should have received a copy of the GNU Affero General Public License
-//  along with SourceBans-Fork. If not, see <http://www.gnu.org/licenses/>.
+//  along with SourceBans (FORK).  If not, see <http://www.gnu.org/licenses/>.
 //
-//  This file incorporates work covered by the following copyright(s): 
+//  This file incorporates work covered by the following copyrights: 
 //
 //   SourceBans 1.4.11
 //   Copyright (C) 2007-2015 SourceBans Team - Part of GameConnect
@@ -30,13 +30,8 @@
 
 #undef REQUIRE_PLUGIN
 #include <adminmenu>
-#tryinclude <updater>
 
-#define SB_VERSION "1.5.2F-R2-dev-git230"
-
-#if defined _updater_included
-#define UPDATE_URL "https://sarabveer.github.io/SourceBans-Fork/updater/updatefile.txt"
-#endif
+#define SB_VERSION "1.5.2F"
 
 //GLOBAL DEFINES
 #define YELLOW				0x01
@@ -46,8 +41,6 @@
 
 #define DISABLE_ADDBAN		1
 #define DISABLE_UNBAN		2
-
-#define FLAG_LETTERS_SIZE 26
 
 //#define DEBUG
 
@@ -80,7 +73,7 @@ new bool:loadAdmins;
 new bool:loadGroups;
 new bool:loadOverrides;
 new curLoading=0;
-new AdminFlag:g_FlagLetters[FLAG_LETTERS_SIZE];
+new AdminFlag:g_FlagLetters[26];
 
 /* Admin KeyValues */
 new String:groupsLoc[128];
@@ -130,7 +123,7 @@ new serverID = -1;
 
 public Plugin:myinfo =
 {
-	name = "SourceBans-Fork",
+	name = "SourceBans",
 	author = "SourceBans Development Team, Sarabveer(VEER™)",
 	description = "Advanced ban management for the Source engine",
 	version = SB_VERSION,
@@ -164,7 +157,7 @@ public OnPluginStart()
 	
 	CvarHostIp = FindConVar("hostip");
 	CvarPort = FindConVar("hostport");
-	CreateConVar("sbf_version", SB_VERSION, _, FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
+	CreateConVar("sb_version", SB_VERSION, _, FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
 	RegServerCmd("sm_rehash",sm_rehash,"Reload SQL admins");
 	RegAdminCmd("sm_ban", CommandBan, ADMFLAG_BAN, "sm_ban <#userid|name> <minutes|0> [reason]", "sourcebans");
 	RegAdminCmd("sm_banip", CommandBanIp, ADMFLAG_BAN, "sm_banip <ip|#userid|name> <time> [reason]", "sourcebans");
@@ -191,7 +184,28 @@ public OnPluginStart()
 		SetMenuExitBackButton(HackingMenuHandle, true);
 	}
 	
-	g_FlagLetters = CreateFlagLetters();
+	g_FlagLetters['a'-'a'] = Admin_Reservation;
+	g_FlagLetters['b'-'a'] = Admin_Generic;
+	g_FlagLetters['c'-'a'] = Admin_Kick;
+	g_FlagLetters['d'-'a'] = Admin_Ban;
+	g_FlagLetters['e'-'a'] = Admin_Unban;
+	g_FlagLetters['f'-'a'] = Admin_Slay;
+	g_FlagLetters['g'-'a'] = Admin_Changemap;
+	g_FlagLetters['h'-'a'] = Admin_Convars;
+	g_FlagLetters['i'-'a'] = Admin_Config;
+	g_FlagLetters['j'-'a'] = Admin_Chat;
+	g_FlagLetters['k'-'a'] = Admin_Vote;
+	g_FlagLetters['l'-'a'] = Admin_Password;
+	g_FlagLetters['m'-'a'] = Admin_RCON;
+	g_FlagLetters['n'-'a'] = Admin_Cheats;
+	g_FlagLetters['o'-'a'] = Admin_Custom1;
+	g_FlagLetters['p'-'a'] = Admin_Custom2;
+	g_FlagLetters['q'-'a'] = Admin_Custom3;
+	g_FlagLetters['r'-'a'] = Admin_Custom4;
+	g_FlagLetters['s'-'a'] = Admin_Custom5;
+	g_FlagLetters['t'-'a'] = Admin_Custom6;
+	g_FlagLetters['z'-'a'] = Admin_Root;
+	
 	
 	BuildPath(Path_SM, logFile, sizeof(logFile), "logs/sourcebans.log");
 	g_bConnecting = true;
@@ -236,24 +250,7 @@ public OnPluginStart()
 			}
 		}
 	}
-	
-	#if defined _updater_included
-	if (LibraryExists("updater"))
-    	{
-        	Updater_AddPlugin(UPDATE_URL);
-    	}
-    	#endif
 }
-
-#if defined _updater_included
-public OnLibraryAdded(const String:name[])
-{
-    if (StrEqual(name, "updater"))
-    {
-        Updater_AddPlugin(UPDATE_URL);
-    }
-}
-#endif
 
 public OnAllPluginsLoaded()
 {
@@ -2511,35 +2508,6 @@ stock ParseBackupConfig_Overrides()
 	}
 	while(KvGotoNextKey(hKV));
 	CloseHandle(hKV);
-}
-
-stock AdminFlag:CreateFlagLetters()
-{
-	new AdminFlag:FlagLetters[FLAG_LETTERS_SIZE];
-	
-	FlagLetters['a'-'a'] = Admin_Reservation;
-	FlagLetters['b'-'a'] = Admin_Generic;
-	FlagLetters['c'-'a'] = Admin_Kick;
-	FlagLetters['d'-'a'] = Admin_Ban;
-	FlagLetters['e'-'a'] = Admin_Unban;
-	FlagLetters['f'-'a'] = Admin_Slay;
-	FlagLetters['g'-'a'] = Admin_Changemap;
-	FlagLetters['h'-'a'] = Admin_Convars;
-	FlagLetters['i'-'a'] = Admin_Config;
-	FlagLetters['j'-'a'] = Admin_Chat;
-	FlagLetters['k'-'a'] = Admin_Vote;
-	FlagLetters['l'-'a'] = Admin_Password;
-	FlagLetters['m'-'a'] = Admin_RCON;
-	FlagLetters['n'-'a'] = Admin_Cheats;
-	FlagLetters['o'-'a'] = Admin_Custom1;
-	FlagLetters['p'-'a'] = Admin_Custom2;
-	FlagLetters['q'-'a'] = Admin_Custom3;
-	FlagLetters['r'-'a'] = Admin_Custom4;
-	FlagLetters['s'-'a'] = Admin_Custom5;
-	FlagLetters['t'-'a'] = Admin_Custom6;
-	FlagLetters['z'-'a'] = Admin_Root;
-	
-	return FlagLetters;
 }
 
 //Yarr!
