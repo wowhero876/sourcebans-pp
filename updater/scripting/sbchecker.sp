@@ -1,21 +1,21 @@
 // *************************************************************************
-//  This file is part of SourceBans (FORK).
+//  This file is part of SourceBans: Reloaded.
 //
 //  Copyright (C) 2014-2015 Sarabveer Singh <sarabveer@sarabveer.me>
 //  
-//  SourceBans (FORK) is free software: you can redistribute it and/or modify
+//  SourceBans: Reloaded is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Affero General Public License as published by
 //  the Free Software Foundation, per version 3 of the License.
 //  
-//  SourceBans (FORK) is distributed in the hope that it will be useful,
+//  SourceBans: Reloaded is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //  
 //  You should have received a copy of the GNU Affero General Public License
-//  along with SourceBans (FORK).  If not, see <http://www.gnu.org/licenses/>.
+//  along with SourceBans: Reloaded. If not, see <http://www.gnu.org/licenses/>.
 //
-//  This file incorporates work covered by the following copyrights:  
+//  This file incorporates work covered by the following copyright(s):
 //
 //   SourceBans Checker 1.0.2
 //   Copyright (C) 2010-2013 Nicholas Hastings 
@@ -25,8 +25,9 @@
 // *************************************************************************
 #include <sourcemod>
 
-#define VERSION "SB-1.5.2F"
+#define VERSION "SBR-1.6.0"
 #define LISTBANS_USAGE "sm_listsbbans <#userid|name> - Lists a user's prior bans from Sourcebans"
+#define INVALID_TARGET -1
 
 new String:g_DatabasePrefix[10] = "sb";
 new Handle:g_ConfigParser;
@@ -118,8 +119,9 @@ public Action:OnListSourceBansCmd(client, args)
 	GetCmdArg(1, targetarg, sizeof(targetarg));
 	
 	new target = FindTarget(client, targetarg, true, true);
-	if (target == -1)
+	if (target == INVALID_TARGET)
 	{
+		ReplyToCommand(client, "Error: Could not find a target matching '%s'.", targetarg);
 		return Plugin_Handled;
 	}
 	
@@ -199,17 +201,18 @@ public OnListBans(Handle:owner, Handle:hndl, const String:error[], any:pack)
 		
 		if (!SQL_IsFieldNull(hndl, 1))
 		{
-			SQL_FetchString(hndl, 1, bannedby, sizeof(bannedby));
+			new size_bannedby = sizeof(bannedby);
+			SQL_FetchString(hndl, 1, bannedby, size_bannedby);
 			new len = SQL_FetchSize(hndl, 1);
-			if (len > sizeof(bannedby)-1)
+			if (len > size_bannedby-1)
 			{
-				reason[sizeof(bannedby)-4] = '.';
-				reason[sizeof(bannedby)-3] = '.';
-				reason[sizeof(bannedby)-2] = '.';
+				reason[size_bannedby-4] = '.';
+				reason[size_bannedby-3] = '.';
+				reason[size_bannedby-2] = '.';
 			}
 			else
 			{
-				for (new i = len; i < sizeof(bannedby)-1; i++)
+				for (new i = len; i < size_bannedby-1; i++)
 				{
 					bannedby[i] = ' ';
 				}
@@ -217,15 +220,16 @@ public OnListBans(Handle:owner, Handle:hndl, const String:error[], any:pack)
 		}
 		
 		// NOT NULL
+		new size_lenstring = sizeof(lenstring);
 		new length = SQL_FetchInt(hndl, 3);
 		if (length == 0)
 		{
-			strcopy(lenstring, sizeof(lenstring), "Permanent ");
+			strcopy(lenstring, size_lenstring, "Permanent ");
 		}
 		else
 		{
-			new len = IntToString(length, lenstring, sizeof(lenstring));
-			if (len < sizeof(lenstring)-1)
+			new len = IntToString(length, lenstring, size_lenstring);
+			if (len < size_lenstring -1)
 			{
 				// change the '\0' to a ' '. the original \0 at the end will still be there
 				lenstring[len] = ' ';
@@ -238,17 +242,18 @@ public OnListBans(Handle:owner, Handle:hndl, const String:error[], any:pack)
 		}
 		
 		// NOT NULL
-		SQL_FetchString(hndl, 4, reason, sizeof(reason));
+		new reason_size = sizeof(reason);
+		SQL_FetchString(hndl, 4, reason, reason_size);
 		new len = SQL_FetchSize(hndl, 4);
-		if (len > sizeof(reason)-1)
+		if (len > reason_size-1)
 		{
-			reason[sizeof(reason)-4] = '.';
-			reason[sizeof(reason)-3] = '.';
-			reason[sizeof(reason)-2] = '.';
+			reason[reason_size-4] = '.';
+			reason[reason_size-3] = '.';
+			reason[reason_size-2] = '.';
 		}
 		else
 		{
-			for (new i = len; i < sizeof(reason)-1; i++)
+			for (new i = len; i < reason_size-1; i++)
 			{
 				reason[i] = ' ';
 			}
@@ -334,14 +339,7 @@ static InternalReadConfig(const String:path[])
 	if (err != SMCError_Okay)
 	{
 		decl String:buffer[64];
-		if (SMC_GetErrorString(err, buffer, sizeof(buffer)))
-		{
-			PrintToServer(buffer);
-		}
-		else
-		{
-			PrintToServer("Fatal parse error");
-		}
+		PrintToServer("%s", SMC_GetErrorString(err, buffer, sizeof(buffer)) ? buffer : "Fatal parse error");
 	}
 }
 

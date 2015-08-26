@@ -1,21 +1,21 @@
 // *************************************************************************
-//  This file is part of SourceBans (FORK).
+//  This file is part of SourceBans: Reloaded.
 //
 //  Copyright (C) 2014-2015 Sarabveer Singh <sarabveer@sarabveer.me>
 //  
-//  SourceBans (FORK) is free software: you can redistribute it and/or modify
+//  SourceBans: Reloaded is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Affero General Public License as published by
 //  the Free Software Foundation, per version 3 of the License.
 //  
-//  SourceBans (FORK) is distributed in the hope that it will be useful,
+//  SourceBans: Reloaded is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //  
 //  You should have received a copy of the GNU Affero General Public License
-//  along with SourceBans (FORK).  If not, see <http://www.gnu.org/licenses/>.
+//  along with SourceBans: Reloaded. If not, see <http://www.gnu.org/licenses/>.
 //
-//  This file incorporates work covered by the following copyright:  
+//  This file incorporates work covered by the following copyright(s): 
 //
 //   SourceComms 0.9.266
 //   Copyright (C) 2013-2014 Alexandr Duplishchev
@@ -42,7 +42,7 @@
 // Do not edit below this line //
 //-----------------------------//
 
-#define PLUGIN_VERSION "SB-1.5.2F"
+#define PLUGIN_VERSION "SBR-1.6.0"
 #define PREFIX "\x04[SourceComms]\x01 "
 
 #define MAX_TIME_MULTI 30       // maximum mass-target punishment length
@@ -397,10 +397,10 @@ public Action:CommandComms(client, args)
 
 public Action:FWBlock(args)
 {
-    new String:arg_string[256], String:sArg[3][64];
+    decl String:arg_string[256], String:sArg[3][64];
     GetCmdArgString(arg_string, sizeof(arg_string));
 
-    new type, length;
+    decl type, length;
     if(ExplodeString(arg_string, " ", sArg, 3, 64) != 3 || !StringToIntEx(sArg[0], type) || type < 1 || type > 3 || !StringToIntEx(sArg[1], length))
     {
         LogError("Wrong usage of sc_fw_block");
@@ -409,11 +409,11 @@ public Action:FWBlock(args)
 
     LogMessage("Received block command from web: steam %s, type %d, length %d", sArg[2], type, length);
 
+    decl String:clientAuth[64];
     for (new i = 1; i <= MaxClients; i++)
     {
         if (IsClientInGame(i) && IsClientAuthorized(i) && !IsFakeClient(i))
         {
-            decl String:clientAuth[64];
             GetClientAuthId(i, AuthId_Steam2, clientAuth, sizeof(clientAuth));
             if (strcmp(clientAuth, sArg[2], false) == 0)
             {
@@ -421,23 +421,16 @@ public Action:FWBlock(args)
                     PrintToServer("Catched %s for blocking from web", clientAuth);
                 #endif
 
-                if (g_MuteType[i] == bNot && (type == 1 || type == 3))
-                {
-                    PerformMute(i, _, length / 60, _, _, _, _);
-                    PrintToChat(i, "%s%t", PREFIX, "Muted on connect");
-                    LogMessage("%s is muted from web", clientAuth);
-                }
-                if (g_GagType[i] == bNot && (type == 2 || type == 3))
-                {
-                    PerformGag(i, _, length / 60, _, _, _, _);
-                    PrintToChat(i, "%s%t", PREFIX, "Gagged on connect");
-                    LogMessage("%s is gagged from web", clientAuth);
+                switch (type) {
+                    case TYPE_MUTE: setMute(i, length, clientAuth);
+                    case TYPE_GAG: setGag(i, length, clientAuth);
+                    case TYPE_SILENCE: { setMute(i, length, clientAuth); setGag(i, length, clientAuth); }
                 }
                 break;
             }
         }
     }
-
+    
     return Plugin_Handled;
 }
 
@@ -983,14 +976,13 @@ AdminMenu_ListTarget(client, target, index, viewMute = 0, viewGag = 0)
 
             decl String:sMuteTemp[192], String:_sMuteTime[192];
             Format(sMuteTemp, sizeof(sMuteTemp), "%T", "ListMenu_Option_Duration", client);
-            if (g_MuteType[target] == bPerm)
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Duration_Perm", client);
-            else if (g_MuteType[target] == bTime)
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Duration_Time", client, g_iMuteLength[target]);
-            else if (g_MuteType[target] == bSess)
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Duration_Temp", client);
-            else
-                Format(sBuffer, sizeof(sBuffer), "error");
+            switch (g_MuteType[target])
+            {
+                case bPerm: Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Duration_Perm", client);
+                case bTime: Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Duration_Time", client, g_iMuteLength[target]);
+                case bSess: Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Duration_Temp", client);
+                default:    Format(sBuffer, sizeof(sBuffer), "error");
+            }
             AddMenuItem(hMenu, "", sBuffer, ITEMDRAW_DISABLED);
 
             FormatTime(_sMuteTime, sizeof(_sMuteTime), NULL_STRING, g_iMuteTime[target]);
@@ -998,17 +990,17 @@ AdminMenu_ListTarget(client, target, index, viewMute = 0, viewGag = 0)
             AddMenuItem(hMenu, "", sBuffer, ITEMDRAW_DISABLED);
 
             Format(sMuteTemp, sizeof(sMuteTemp), "%T", "ListMenu_Option_Expire", client);
-            if (g_MuteType[target] == bPerm)
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Expire_Perm", client);
-            else if (g_MuteType[target] == bTime)
+            switch (g_MuteType[target])
             {
-                FormatTime(_sMuteTime, sizeof(_sMuteTime), NULL_STRING, (g_iMuteTime[target] + g_iMuteLength[target] * 60));
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Expire_Time", client, _sMuteTime);
+                case bTime:
+                {
+                    FormatTime(_sMuteTime, sizeof(_sMuteTime), NULL_STRING, (g_iMuteTime[target] + g_iMuteLength[target] * 60));
+                    Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Expire_Time", client, _sMuteTime);
+                }
+                case bPerm: Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Expire_Perm", client);
+                case bSess: Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Expire_Temp_Reconnect", client);
+                default: Format(sBuffer, sizeof(sBuffer), "error");
             }
-            else if (g_MuteType[target] == bSess)
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sMuteTemp, "ListMenu_Option_Expire_Temp_Reconnect", client);
-            else
-                Format(sBuffer, sizeof(sBuffer), "error");
             AddMenuItem(hMenu, "", sBuffer, ITEMDRAW_DISABLED);
 
             if (strlen(g_sMuteReason[target]) > 0)
@@ -1038,14 +1030,15 @@ AdminMenu_ListTarget(client, target, index, viewMute = 0, viewGag = 0)
 
             decl String:sGagTemp[192], String:_sGagTime[192];
             Format(sGagTemp, sizeof(sGagTemp), "%T", "ListMenu_Option_Duration", client);
-            if (g_GagType[target] == bPerm)
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Duration_Perm", client);
-            else if (g_GagType[target] == bTime)
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Duration_Time", client, g_iGagLength[target]);
-            else if (g_GagType[target] == bSess)
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Duration_Temp", client);
-            else
-                Format(sBuffer, sizeof(sBuffer), "error");
+            
+            switch (g_GagType[target])
+            {
+                case bPerm: Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Duration_Perm", client);
+                case bTime: Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Duration_Time", client, g_iGagLength[target]);
+                case bSess: Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Duration_Temp", client);
+                default:    Format(sBuffer, sizeof(sBuffer), "error");
+            }
+            
             AddMenuItem(hMenu, "", sBuffer, ITEMDRAW_DISABLED);
 
             FormatTime(_sGagTime, sizeof(_sGagTime), NULL_STRING, g_iGagTime[target]);
@@ -1053,17 +1046,19 @@ AdminMenu_ListTarget(client, target, index, viewMute = 0, viewGag = 0)
             AddMenuItem(hMenu, "", sBuffer, ITEMDRAW_DISABLED);
 
             Format(sGagTemp, sizeof(sGagTemp), "%T", "ListMenu_Option_Expire", client);
-            if (g_GagType[target] == bPerm)
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Expire_Perm", client);
-            else if (g_GagType[target] == bTime)
+            
+            switch (g_GagType[target])
             {
-                FormatTime(_sGagTime, sizeof(_sGagTime), NULL_STRING, (g_iGagTime[target] + g_iGagLength[target] * 60));
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Expire_Time", client, _sGagTime);
+                case bTime: 
+                {
+                    FormatTime(_sGagTime, sizeof(_sGagTime), NULL_STRING, (g_iGagTime[target] + g_iGagLength[target] * 60));
+                    Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Expire_Time", client, _sGagTime);
+                }
+                case bPerm: Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Expire_Perm", client);
+                case bSess: Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Expire_Temp_Reconnect", client);
+                default: Format(sBuffer, sizeof(sBuffer), "error");
             }
-            else if (g_GagType[target] == bSess)
-                Format(sBuffer, sizeof(sBuffer), "%s%T", sGagTemp, "ListMenu_Option_Expire_Temp_Reconnect", client);
-            else
-                Format(sBuffer, sizeof(sBuffer), "error");
+            
             AddMenuItem(hMenu, "", sBuffer, ITEMDRAW_DISABLED);
 
             if (strlen(g_sGagReason[target]) > 0)
@@ -1134,14 +1129,13 @@ AdminMenu_ListTargetReason(client, target, showMute, showGag)
     if (showMute)
     {
         Format(sTemp, sizeof(sTemp), "%T", "ReasonPanel_Punishment_Mute", client);
-        if (g_MuteType[target] == bPerm)
-            Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Perm", client);
-        else if (g_MuteType[target] == bTime)
-            Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Time", client, g_iMuteLength[target]);
-        else if (g_MuteType[target] == bSess)
-            Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Temp", client);
-        else
-            Format(sBuffer, sizeof(sBuffer), "error");
+        switch (g_MuteType[target])
+        {
+            case bPerm: Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Perm", client);
+            case bTime: Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Time", client, g_iMuteLength[target]);
+            case bSess: Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Temp", client);
+            default:    Format(sBuffer, sizeof(sBuffer), "error");
+        }
         DrawPanelText(hPanel, sBuffer);
 
         Format(sBuffer, sizeof(sBuffer), "%T", "ReasonPanel_Reason", client, g_sMuteReason[target]);
@@ -1150,14 +1144,13 @@ AdminMenu_ListTargetReason(client, target, showMute, showGag)
     else if (showGag)
     {
         Format(sTemp, sizeof(sTemp), "%T", "ReasonPanel_Punishment_Gag", client);
-        if (g_GagType[target] == bPerm)
-            Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Perm", client);
-        else if (g_GagType[target] == bTime)
-            Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Time", client, g_iGagLength[target]);
-        else if (g_GagType[target] == bSess)
-            Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Temp", client);
-        else
-            Format(sBuffer, sizeof(sBuffer), "error");
+        switch (g_GagType[target])
+        {
+            case bPerm: Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Perm", client);
+            case bTime: Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Time", client, g_iGagLength[target]);
+            case bSess: Format(sBuffer, sizeof(sBuffer), "%s%T", sTemp, "ReasonPanel_Temp", client);
+            default:    Format(sBuffer, sizeof(sBuffer), "error");
+        }
         DrawPanelText(hPanel, sBuffer);
 
         Format(sBuffer, sizeof(sBuffer), "%T", "ReasonPanel_Reason", client, g_sGagReason[target]);
@@ -1174,12 +1167,12 @@ AdminMenu_ListTargetReason(client, target, showMute, showGag)
 
 public PanelHandler_ListTargetReason(Handle:menu, MenuAction:action, param1, param2)
 {
-    switch(action)
+    if (action == MenuAction_Select)
     {
-        case MenuAction_Select:
-        {
-            AdminMenu_ListTarget(param1, g_iPeskyPanels[param1][curTarget], g_iPeskyPanels[param1][curIndex], g_iPeskyPanels[param1][viewingMute], g_iPeskyPanels[param1][viewingGag]);
-        }
+        AdminMenu_ListTarget(param1,g_iPeskyPanels[param1][curTarget], 
+                                    g_iPeskyPanels[param1][curIndex], 
+                                    g_iPeskyPanels[param1][viewingMute], 
+                                    g_iPeskyPanels[param1][viewingGag]);
     }
 }
 
@@ -1762,14 +1755,7 @@ static InternalReadConfig(const String:path[])
     if (err != SMCError_Okay)
     {
         decl String:buffer[64];
-        if (SMC_GetErrorString(err, buffer, sizeof(buffer)))
-        {
-            PrintToServer(buffer);
-        }
-        else
-        {
-            PrintToServer("Fatal parse error");
-        }
+        PrintToServer("%s", SMC_GetErrorString(err, buffer, sizeof(buffer)) ? buffer : "Fatal parse error");
     }
 }
 
@@ -1917,6 +1903,25 @@ public SMCResult:ReadConfig_EndSection(Handle:smc)
 }
 
 // STOCK FUNCTIONS //
+stock setGag(client, length, const String:clientAuth[])
+{
+    if (g_GagType[client] == bNot)
+    {
+        PerformGag(client, _, length / 60, _, _, _, _);
+        PrintToChat(client, "%s%t", PREFIX, "Gagged on connect");
+        LogMessage("%s is gagged from web", clientAuth);
+    }
+}
+
+stock setMute(client, length, const String:clientAuth[])
+{
+    if (g_MuteType[client] == bNot)
+    {
+        PerformMute(client, _, length / 60, _, _, _, _);
+        PrintToChat(client, "%s%t", PREFIX, "Muted on connect");
+        LogMessage("%s is muted from web", clientAuth);
+    }
+}
 
 stock bool:DB_Connect()
 {
@@ -2521,13 +2526,15 @@ stock InsertTempBlock(length, type, const String:name[], const String:auth[], co
         "'%s', %d, %d, '%s', '%s', '%s', '%s'",
         sAuthEscaped, length, GetTime(), banReason, banName, sAdminAuthEscaped, adminIp);
 
-    if (type == TYPE_MUTE || type == TYPE_SILENCE)
+    switch (type)
     {
-        FormatEx(sQueryMute, sizeof(sQueryMute), "(%s, %d)", sQueryVal, TYPE_MUTE);
-    }
-    if (type == TYPE_GAG || type == TYPE_SILENCE)
-    {
-        FormatEx(sQueryGag, sizeof(sQueryGag), "(%s, %d)", sQueryVal, TYPE_GAG);
+        case TYPE_MUTE: FormatEx(sQueryMute, sizeof(sQueryMute), "(%s, %d)", sQueryVal, type);
+        case TYPE_GAG:  FormatEx(sQueryGag, sizeof(sQueryGag), "(%s, %d)", sQueryVal, type);
+        case TYPE_SILENCE:
+        {
+            FormatEx(sQueryMute, sizeof(sQueryMute), "(%s, %d)", sQueryVal, TYPE_MUTE);
+            FormatEx(sQueryGag, sizeof(sQueryGag), "(%s, %d)", sQueryVal, TYPE_GAG);
+        }
     }
 
     FormatEx(sQuery, sizeof(sQuery),
@@ -2563,12 +2570,12 @@ stock ReadConfig()
     }
 
     decl String:ConfigFile1[PLATFORM_MAX_PATH], String:ConfigFile2[PLATFORM_MAX_PATH];
-    BuildPath(Path_SM, ConfigFile1, sizeof(ConfigFile1), "configs/sourcebans/sourcebans.cfg");
-    BuildPath(Path_SM, ConfigFile2, sizeof(ConfigFile2), "configs/sourcebans/sourcecomms.cfg");
+    BuildPath(Path_SM, ConfigFile1, sizeof(ConfigFile1), "configs/sourcebans.cfg");
+    BuildPath(Path_SM, ConfigFile2, sizeof(ConfigFile2), "configs/sourcecomms.cfg");
 
     if (FileExists(ConfigFile1))
     {
-        PrintToServer("%sLoading configs/sourcebans/sourcebans.cfg config file", PREFIX);
+        PrintToServer("%sLoading configs/sourcebans.cfg config file", PREFIX);
         InternalReadConfig(ConfigFile1);
     }
     else
@@ -2577,7 +2584,6 @@ stock ReadConfig()
     }
     if (FileExists(ConfigFile2))
     {
-        PrintToServer("%sLoading configs/sourcecomms.cfg config file", PREFIX);
         PrintToServer("%sLoading configs/sourcecomms.cfg config file", PREFIX);
         iNumReasons = 0;
         iNumTimes = 0;
@@ -2912,13 +2918,15 @@ stock SavePunishment(admin = 0, target, type, length = -1 , const String:reason[
             "'%s', '%s', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() + %d, %d, '%s', %s, '%s', %d",
             sAuthidEscaped, banName, length*60, length*60, banReason, sQueryAdm, adminIp, serverID);
 
-        if (type == TYPE_MUTE || type == TYPE_SILENCE)
+        switch (type)
         {
-            FormatEx(sQueryMute, sizeof(sQueryMute), "(%s, %d)", sQueryVal, TYPE_MUTE);
-        }
-        if (type == TYPE_GAG || type == TYPE_SILENCE)
-        {
-            FormatEx(sQueryGag, sizeof(sQueryGag), "(%s, %d)", sQueryVal, TYPE_GAG);
+            case TYPE_GAG:  FormatEx(sQueryGag, sizeof(sQueryGag), "(%s, %d)", sQueryVal, type);
+            case TYPE_MUTE: FormatEx(sQueryMute, sizeof(sQueryMute), "(%s, %d)", sQueryVal, type);
+            case TYPE_SILENCE:
+            {
+                FormatEx(sQueryMute, sizeof(sQueryMute), "(%s, %d)", sQueryVal, TYPE_MUTE);
+                FormatEx(sQueryGag, sizeof(sQueryGag), "(%s, %d)", sQueryVal, TYPE_GAG);
+            }
         }
 
         // litle magic - one query for all actions (mute, gag or silence)
