@@ -4,7 +4,7 @@
 //  Copyright (C) 2014-2015 Sarabveer Singh <sarabveer@sarabveer.me>
 //  
 //  SourceBans: Reloaded is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU Affero General Public License as published by
+//  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, per version 3 of the License.
 //  
 //  SourceBans: Reloaded is distributed in the hope that it will be useful,
@@ -12,7 +12,7 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //  
-//  You should have received a copy of the GNU Affero General Public License
+//  You should have received a copy of the GNU General Public License
 //  along with SourceBans: Reloaded. If not, see <http://www.gnu.org/licenses/>.
 //
 //  This file incorporates work covered by the following copyright(s): 
@@ -42,7 +42,7 @@
 // Do not edit below this line //
 //-----------------------------//
 
-#define PLUGIN_VERSION "SBR-1.6.0"
+#define PLUGIN_VERSION "SBR-1.5.3"
 #define PREFIX "\x04[SourceComms]\x01 "
 
 #define MAX_TIME_MULTI 30       // maximum mass-target punishment length
@@ -2570,12 +2570,12 @@ stock ReadConfig()
     }
 
     decl String:ConfigFile1[PLATFORM_MAX_PATH], String:ConfigFile2[PLATFORM_MAX_PATH];
-    BuildPath(Path_SM, ConfigFile1, sizeof(ConfigFile1), "configs/sourcebans.cfg");
-    BuildPath(Path_SM, ConfigFile2, sizeof(ConfigFile2), "configs/sourcecomms.cfg");
+    BuildPath(Path_SM, ConfigFile1, sizeof(ConfigFile1), "configs/sourcebans/sourcebans.cfg");
+    BuildPath(Path_SM, ConfigFile2, sizeof(ConfigFile2), "configs/sourcebans/sourcecomms.cfg");
 
     if (FileExists(ConfigFile1))
     {
-        PrintToServer("%sLoading configs/sourcebans.cfg config file", PREFIX);
+        PrintToServer("%sLoading configs/sourcebans/sourcebans.cfg config file", PREFIX);
         InternalReadConfig(ConfigFile1);
     }
     else

@@ -4,41 +4,32 @@
 	{
 		"Version"
 		{
-			"Latest"	"1.6.0"
+			"Latest"	"1.5.3"
 		}
 		
-		"Notes"	"More info @ github.com/Sarabveer/SourceBans-Fork. Changes in 1.6.0:"
-		"Notes"	"Now using SB 1.5Beta Plugin"
+		"Notes"	"More info @ github.com/Sarabveer/SourceBans-Fork. Changes in 1.5.3:"
+		"Notes"	"Fixes TF2 Admin File issues"
 	}
 	
 	"Files"
 	{
 		"Plugin"	"Path_SM/plugins/sourcebans.smx"
-		"Plugin"	"Path_SM/plugins/sb_admins.smx"
-		"Plugin"	"Path_SM/plugins/sb_bans.smx"
-		"Plugin"	"Path_SM/plugins/sb_familysharing.smx"
+		"Plugin"	"Path_SM/plugins/sb_admcfg.smx"
 		"Plugin"	"Path_SM/plugins/sourcecomms.smx"
 		"Plugin"	"Path_SM/plugins/SourceSleuth.smx"
 		"Plugin"	"Path_SM/plugins/sbchecker.smx"
 		"Plugin"	"Path_SM/translations/sourcebans.phrases.txt"
-		"Plugin"	"Path_SM/translations/de/sourcebans.phrases.txt"
-		"Plugin"	"Path_SM/translations/fr/sourcebans.phrases.txt"
-		"Plugin"	"Path_SM/translations/nl/sourcebans.phrases.txt"
-		"Plugin"	"Path_SM/translations/pl/sourcebans.phrases.txt"
-		"Plugin"	"Path_SM/translations/ru/sourcebans.phrases.txt"
 		"Plugin"	"Path_SM/translations/sourcecomms.phrases.txt"
 		"Plugin"	"Path_SM/translations/sourcesleuth.phrases.txt"
 		
 		"Source"	"Path_SM/scripting/sourcebans.sp"
-		"Source"	"Path_SM/scripting/sb_admins.sp"
-		"Source"	"Path_SM/scripting/sb_bans.sp"
-		"Source"	"Path_SM/scripting/sb_familysharing.sp"
+		"Source"	"Path_SM/scripting/sb_admcfg.sp"
+		"Source"	"Path_SM/scripting/sb_admcfg/sb_admin_users.sp"
+		"Source"	"Path_SM/scripting/sb_admcfg/sb_admin_groups.sp"
 		"Source"	"Path_SM/scripting/sourcecomms.sp"
 		"Source"	"Path_SM/scripting/SourceSleuth.sp"
 		"Source"	"Path_SM/scripting/sbchecker.sp"
 		"Source"	"Path_SM/scripting/include/sourcebans.inc"
-		"Source"	"Path_SM/scripting/include/sb_admins.inc"
-		"Source"	"Path_SM/scripting/include/sb_bans.inc"
 		"Source"	"Path_SM/scripting/include/sourcecomms.inc"
 	}
 }

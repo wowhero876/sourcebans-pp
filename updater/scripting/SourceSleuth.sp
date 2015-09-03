@@ -4,7 +4,7 @@
 //  Copyright (C) 2014-2015 Sarabveer Singh <sarabveer@sarabveer.me>
 //  
 //  SourceBans: Reloaded is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU Affero General Public License as published by
+//  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, per version 3 of the License.
 //  
 //  SourceBans: Reloaded is distributed in the hope that it will be useful,
@@ -12,7 +12,7 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //  
-//  You should have received a copy of the GNU Affero General Public License
+//  You should have received a copy of the GNU General Public License
 //  along with SourceBans: Reloaded. If not, see <http://www.gnu.org/licenses/>.
 //
 //  This file incorporates work covered by the following copyright(s):   
@@ -27,8 +27,9 @@
 #pragma semicolon 1
 #include <sourcemod>
 #undef REQUIRE_PLUGIN
+#include <sourcebans>
 
-#define PLUGIN_VERSION "SBR-1.6.0"
+#define PLUGIN_VERSION "SBR-1.5.3"
 
 #define LENGTH_ORIGINAL 1
 #define LENGTH_CUSTOM 2
@@ -79,6 +80,8 @@ public OnPluginStart()
 	SQL_TConnect(SQL_OnConnect, "sourcebans");
 	
 	RegAdminCmd("sm_sleuth_reloadlist", ReloadListCallBack, ADMFLAG_ROOT);
+	
+	LoadWhiteList();
 }
 
 public OnAllPluginsLoaded()
@@ -224,7 +227,7 @@ stock BanPlayer(client, time)
 {
 	decl String:Reason[255];
 	Format(Reason, sizeof(Reason), "[SourceSleuth] %t", "sourcesleuth_banreason");
-	BanClient(client, time, BANFLAG_AUTO, Reason, Reason, "sm_ban", client);
+	SBBanPlayer(0, client, time, Reason);
 }
 
 PrintToAdmins(const String:format[], any:...)
