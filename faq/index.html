@@ -32,12 +32,11 @@
 				<h3 class="panel-title">Which ports does the SourceBans Web-Panel require to be open?</h3>
 			</div>
 			<div class="panel-body">
-				<p><b><u>MARIADB IS CURRENTLY NOT SUPPORTED</u></b></p>
 				<p>If your web panel shows <strong>Error Connecting</strong> for your game server when it is actually online,<br />
 				ask your web host to open <strong>UDP incoming</strong> from your game server port (usually <strong>27015</strong>).</p>
 				<p>If either the <strong>RCON console</strong>, <strong>Admin Rehashing</strong> or <strong>Kick-It</strong> does not work on your web panel,<br />
 				ask your web host to open <strong>TCP outgoing</strong> to your game server port (usually <strong>27015</strong>).</p>
-				<p>Use <strong>sb_debug_connection.php</strong> small testing script to get more detailed debugging information. Open the php file and add your gameserver's ip and port as described in the comments.</p>
+				<p>Use <strong>sb_debug_connection.php</strong>, a small testing script to get more detailed debugging information. Open the php file and add your gameserver's ip and port as described in the comments.</p>
 				<p>You should always check beforehand, if your gameserver banned your webserver's ip with <code>listip</code> in rcon. Remove it from the banned_ip.cfg and <code>removeip IP</code> via rcon.</p>
 			</div>
 		</div>
@@ -65,6 +64,7 @@
 				<h3 class="panel-title">My Banlist doesn't show up, but all other pages do. What can I do?</h3>
 			</div>
 			<div class="panel-body">
+				<p><b><u>MARIADB IS CURRENTLY NOT SUPPORTED</u></b></p>
 				<p>Your PHP configuration restricts SourceBans to a certain amount of memory.<br />
 				When viewing the Banlist it tries to lookup the according country for the IP. This is done by loading a ~7MB database file into the memory.</p>
 				<p>There are several ways to solve this.</p>
