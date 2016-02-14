@@ -1,7 +1,7 @@
 // *************************************************************************
 //  This file is part of SourceBans++.
 //
-//  Copyright (C) 2014-2015 Sarabveer Singh <sarabveer@sarabveer.me>
+//  Copyright (C) 2014-2016 Sarabveer Singh <me@sarabveer.me>
 //  
 //  SourceBans++ is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -30,19 +30,19 @@
 
 public Plugin:myinfo = 
 {
-	name = "SourceBans: Admin Config Loader",
-	author = "AlliedModders LLC, Sarabveer(VEER™)",
-	description = "Reads admin files",
-	version = "1.5.3",
+	name = "SourceBans++: Admin Config Loader", 
+	author = "AlliedModders LLC, Sarabveer(VEER™)", 
+	description = "Reads admin files", 
+	version = "1.5.4", 
 	url = "https://github.com/Sarabveer/SourceBans-Fork"
 };
 
 /** Various parsing globals */
-new bool:g_LoggedFileName = false;			/* Whether or not the file name has been logged */
-new g_ErrorCount = 0;						/* Current error count */
-new g_IgnoreLevel = 0;						/* Nested ignored section count, so users can screw up files safely */
-new g_CurrentLine = 0;						/* Current line we're on */
-new String:g_Filename[PLATFORM_MAX_PATH];	/* Used for error messages */
+new bool:g_LoggedFileName = false; /* Whether or not the file name has been logged */
+new g_ErrorCount = 0; /* Current error count */
+new g_IgnoreLevel = 0; /* Nested ignored section count, so users can screw up files safely */
+new g_CurrentLine = 0; /* Current line we're on */
+new String:g_Filename[PLATFORM_MAX_PATH]; /* Used for error messages */
 
 #include "sb_admcfg/sb_admin_groups.sp"
 #include "sb_admcfg/sb_admin_users.sp"
