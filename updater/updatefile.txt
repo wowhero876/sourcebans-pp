@@ -4,10 +4,10 @@
 	{
 		"Version"
 		{
-			"Latest"	"1.5.4"
+			"Latest"	"1.5.4.1"
 		}
 		
-		"Notes"	"More info @ github.com/Sarabveer/SourceBans-Fork. Changes in 1.5.3:"
+		"Notes"	"More info @ github.com/Sarabveer/SourceBans-Fork"
 	}
 	
 	"Files"
