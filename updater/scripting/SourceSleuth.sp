@@ -2,20 +2,20 @@
 //  This file is part of SourceBans++.
 //
 //  Copyright (C) 2014-2016 Sarabveer Singh <me@sarabveer.me>
-//  
+//
 //  SourceBans++ is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, per version 3 of the License.
-//  
+//
 //  SourceBans++ is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with SourceBans++. If not, see <http://www.gnu.org/licenses/>.
 //
-//  This file is based off work covered by the following copyright(s):     
+//  This file is based off work covered by the following copyright(s):
 //
 //   SourceSleuth 1.3 fix
 //   Copyright (C) 2013-2015 ecca
@@ -31,7 +31,7 @@
 #undef REQUIRE_PLUGIN
 #include <sourcebans>
 
-#define PLUGIN_VERSION "(SB++) 1.5.4.5"
+#define PLUGIN_VERSION "(SB++) 1.5.4.6"
 
 #define LENGTH_ORIGINAL 1
 #define LENGTH_CUSTOM 2
@@ -212,7 +212,13 @@ public SQL_CheckHim(Handle:owner, Handle:hndl, const String:error[], any:datapac
 				case LENGTH_DOUBLE:
 				{
 					new length = SQL_FetchInt(hndl, 6);
-					new time = length / 60 * 2;
+					
+					new time = 0;
+					
+					if (length != 0)
+					{
+						time = length / 60 * 2;
+					}
 					
 					BanPlayer(client, time);
 				}
