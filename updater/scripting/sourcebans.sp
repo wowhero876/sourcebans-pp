@@ -65,6 +65,7 @@ new g_BanTime[MAXPLAYERS + 1] =  { -1, ... };
 
 new State:ConfigState;
 new Handle:ConfigParser;
+new Handle:updaterCvar = INVALID_HANDLE;
 new Handle:hTopMenu = INVALID_HANDLE;
 
 new const String:Prefix[] = "[SourceBans] ";
@@ -235,6 +236,13 @@ public OnPluginStart()
 }
 
 #if defined _updater_included
+public Action:Updater_OnPluginDownloading() {
+	if (!GetConVarBool(updaterCvar)) {
+		return Plugin_Handled;
+	}
+	return Plugin_Continue;
+}
+
 public OnLibraryAdded(const String:name[]) {
 	if (StrEqual(name, "updater")) {
 		Updater_AddPlugin(UPDATE_URL);
