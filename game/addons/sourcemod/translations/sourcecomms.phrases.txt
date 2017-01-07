@@ -4,6 +4,7 @@
 	"Muted on connect"
 	{
 		"en"			"You have been muted!"
+		"tr"			"Konuşmanız yasaklanmıştır!"
 		"hu"			"Le lettél némítva!"
 		"es"			"Has sido muteado!"
 		"ru"			"Вам был отключен микрофон!"
@@ -14,6 +15,7 @@
 	"Gagged on connect"
 	{
 		"en"			"You have been gagged!"
+		"tr"			"Yazı yazmanız yasaklanmıştır!"
 		"hu"			"Az írás jogod elvéve!"
 		"es"			"Has sido gageado!"
 		"ru"			"Вам был отключен чат!"
@@ -25,6 +27,7 @@
 	"Mute expired"
 	{
 		"en"			"Your mute has expired."
+		"tr"			"Konuşma yasaklanmanız sona ermiştir."
 		"hu"			"A némítás lejárt."
 		"es"			"Tu muteo ha expirado."
 		"ru"			"Вам был включен микрофон (истек срок блокировки)."
@@ -35,6 +38,7 @@
 	"Gag expired"
 	{
 		"en"			"Your gag has expired."
+		"tr"			"Yazı yazma yasaklanmanız sona ermiştir."
 		"hu"			"Az írás jog visszaadva"
 		"es"			"Tu gageo ha expirado."
 		"ru"			"Вам был включен чат (истек срок блокировки)."
@@ -46,6 +50,7 @@
 	"FWUnmute"
 	{
 		"en"			"Your mute has been removed."
+		"tr"			"Konuşma yasaklanmanız kaldırılmıştır."
 		"hu"			"A némítás törölve."
 		"es"			"Tu muteo ha sido eliminado"
 		"ru"			"Вам был включен микрофон."
@@ -56,6 +61,7 @@
 	"FWUngag"
 	{
 		"en"			"Your gag has been removed."
+		"tr"			"Yazı yazma yasaklanmanız kaldırılmıştır."
 		"hu"			"Az írástól való eltíltás törölve"
 		"es"			"Tu gageo ha sido eliminado"
 		"ru"			"Вам был включен чат."
@@ -68,6 +74,7 @@
 	{
 		"#format"		"{1:d}"
 		"en"			"Time: {1} minutes, if unspecified; permanent, if 0.\nIf < 0, blocks for session."
+		"tr"			"Süre: {1} dakika, eğer belirtilmemişse; süresiz, eğer 0 ise.\nIf < 0, oturum boyunca engeller." 
 		"hu"			"Idő: {1} perc, nem specifikált; örökre, ha 0.\nIf < 0, blocks for session."
 		"es"			"Tiempo: {1} minutos, si no es especificado el tiempo = permanente en caso de ser 0.\nSi es < 0, bloqueo sólo para la sesión."
 		"ru"			"Длительность: {1} минут, если не указана; навсегда, если 0.\nЕсли < 0, блокировка на сессию."
@@ -78,6 +85,7 @@
 	"Player Comms Not Verified"
 	{
 		"en"			"This player has not been verified. Please wait thirty seconds before retrying."
+		"tr"			"Bu oyuncu doğrulanmamıştır. Tekrar denemeden önce lütfen otuz saniye bekleyin.
 		"hu"			"Ezt a játékost még nem igazolták. Kérlek, várj harminc másodpercet , mielőtt újra próbálkoznál."
 		"es"			"este jugador no ha podido ser verificado. Por favor, espera 30 segundos antes de volver a intentarlo"
 		"ru"			"Игрок еще не идентифицирован. Подождите 30 секунд перед следующей попыткой."
@@ -90,6 +98,7 @@
 	{
 		"#format"		"{1:s}"
 		"en"			"Player {1} already muted!"
+		"tr"			"Oyuncu {1} 'in zaten konuşma yasaklanması var."
 		"hu"			"Játékos {1} már le van némítva!"
 		"es"			"El jugador {1} ya está muteado actualmente!"
 		"ru"			"У игрока {1} уже отключен микрофон!"
@@ -101,6 +110,7 @@
 	{
 		"#format"		"{1:s}"
 		"en"			"Player {1} already gagged!"
+		"tr"			"Oyuncu {1} 'in zaten yazı yazma yasaklanması var."
 		"hu"			"Játékos {1} már el van véve az írás joga!"
 		"es"			"El jugador {1} ya está gageado actualmente!"
 		"ru"			"У игрока {1} уже отключен чат!"
@@ -112,6 +122,7 @@
 	{
 		"#format"		"{1:s}"
 		"en"			"Player {1} already gagged or muted!"
+		"tr"			"Oyuncu {1} 'in zaten konuşma yasaklaması veya yazı yazma yasaklaması var."
 		"hu"			"Játékos {1} már le van némítva és az írás jog-tól meg van fosztva!"
 		"es"			"El jugador {1} ya está gageado o muteado actualmente!"
 		"ru"			"У игрока {1} уже отключен чат или микрофон!"
@@ -123,6 +134,7 @@
 	"Player not muted"
 	{
 		"en"			"Player not muted."
+		"tr"			"Oyuncunun konuşma yasaklaması yok."
 		"hu"			"A játékos nincs elnémítva."
 		"es"			"Jugador no muteado."
 		"ru"			"У игрока не отключен микрофон."
@@ -133,6 +145,7 @@
 	"Player not gagged"
 	{
 		"en"			"Player not gagged."
+		"tr"			"Oyuncunun yazı yazma yasaklaması yok."
 		"hu"			"A játékos írhat a chat-be."
 		"es"			"Jugador no gageado."
 		"ru"			"У игрока не отключен чат."
@@ -143,6 +156,7 @@
 	"Player not silenced"
 	{
 		"en"			"Player not silenced."
+		"tr"			"Oyuncu susturluşmamış."
 		"hu"			"A játékos nincs meg fosztva az írás és a hang chat-től."
 		"es"			"Jugador no silenciado."
 		"ru"			"У игрока не отключен чат или микрофон."
@@ -155,6 +169,7 @@
 	{
 		"#format"		"{1:t}"
 		"en"			"Issued a permanent gag on {1}."
+		"tr"			"{1} oyuncusuna süresiz yazı yazma yasaklanması verilmiştir."
 		"hu"			"Az írás jogtól megfosztott örökre {1}."
 		"es"			"Ha gageado permanentemente a {1}."
 		"ru"			"Игроку {1} навсегда отключен чат."
@@ -166,6 +181,7 @@
 	{
 		"#format"		"{1:t},{2:s}"
 		"en"			"Issued a permanent gag on {1} (reason: {2})."
+		"en"			"{1} oyuncusuna süresiz yazı yazma yasaklanması verilmiştir (neden: {2})."
 		"hu"			"Az írás jogtól megfosztott örökre {1} (ok: {2})."
 		"es"			"Ha gageado permanentemente a {1} (razón: {2})."
 		"ru"			"Игроку {1} навсегда отключен чат (причина: {2})."
@@ -177,6 +193,7 @@
 	{
 		"#format"		"{1:t},{2:d}"
 		"en"			"Issued an extended gag on {1} for {2} minutes."
+		"tr"			"{1} oyuncusuna {2} dakika boyunca süresi uzatılmış yazı yasaklanması verilmiştir."
 		"hu"			"Az írás jogtól való eltíltás kiterjed {1} {2} percre."
 		"es"			"Ha gageado extensivamente a {1} por {2} minutos."
 		"ru"			"Игроку {1} отключен чат на {2} минут."
@@ -188,6 +205,7 @@
 	{
 		"#format"		"{1:t},{2:d},{3:s}"
 		"en"			"Issued an extended gag on {1} for {2} minutes (reason: {3})."
+		"tr"			"{1} oyuncusuna {2} dakika boyunca süresi uzatılmış yazı yasaklanması verilmiştir. (neden: {3})."
 		"hu"			"Az írás jogtól való eltíltás kiterjed {1} {2} percre (ok: {3})."
 		"es"			"Ha gageado extensivamente a {1} por {2} minutos (razón: {3})."
 		"ru"			"Игроку {1} отключен чат на {2} минут (причина: {3})."
@@ -200,6 +218,7 @@
 	{
 		"#format"		"{1:t}"
 		"en"			"Issued a permanent mute on {1}."
+		"tr"			"{1} oyuncusuna süresiz konuşma yasaklaması verilmiştir."
 		"hu"			"Örök némítást kapot {1}."
 		"es"			"Ha muteado permanentemente a {1}."
 		"ru"			"Игроку {1} навсегда отключен микрофон."
@@ -211,6 +230,7 @@
 	{
 		"#format"		"{1:t},{2:s}"
 		"en"			"Issued a permanent mute on {1} (reason: {2})."
+		"tr"			"{1} oyuncusuna süresiz konuşma yasaklaması verilmiştir (neden: {2})."
 		"hu"			"Örök némítást kapot {1} (ok: {2})."
 		"es"			"Ha muteado permanentemente a {1} (razón: {2})."
 		"ru"			"Игроку {1} навсегда отключен микрофон (причина: {2})."
@@ -222,6 +242,7 @@
 	{
 		"#format"		"{1:t},{2:d}"
 		"en"			"Issued an extended mute on {1} for {2} minutes."
+		"tr"			"{1} oyuncusuna süresi uzatılmış konuşma yasaklaması verilmiştir."
 		"hu"			"{1} némítva {2} percre."
 		"es"			"Ha muteado extensivamente a {1} por {2} minutos."
 		"ru"			"Игроку {1} отключен микрофон на {2} минут."
@@ -233,6 +254,7 @@
 	{
 		"#format"		"{1:t},{2:d},{3:s}"
 		"en"			"Issued an extended mute on {1} for {2} minutes (reason: {3})."
+		"tr"			"{1} oyuncusuna süresi uzatılmış konuşma yasaklaması verilmiştir (neden: {3})."
 		"hu"			"{1} némítva {2} percre. (ok: {3})."
 		"es"			"Ha muteado extensivamente a {1} por {2} minutos (razón: {3})."
 		"ru"			"Игроку {1} отключен микрофон на {2} минут (причина: {3})."
@@ -245,6 +267,7 @@
 	{
 		"#format"		"{1:t}"
 		"en"			"Issued a permanent silence on {1}."
+		"tr"			"{1} oyuncusu süresiz susturulmuştur."
 		"hu"			"Örekre elnémítva és eltíltva a chat-től {1}."
 		"es"			"Ha silenciado permanentemente a {1}."
 		"ru"			"Игроку {1} навсегда отключен чат и микрофон."
@@ -256,6 +279,7 @@
 	{
 		"#format"		"{1:t},{2:s}"
 		"en"			"Issued a permanent silence on {1} (reason: {2})."
+		"tr"			"{1} oyuncusu süresiz susturulmuştur (neden: {2})."
 		"hu"			"Örekre elnémítva és eltíltva a chat-től {1} (ok: {2})."
 		"es"			"Ha silenciado permanentemente a {1} (razón: {2})."
 		"ru"			"Игроку {1} навсегда отключен чат и микрофон (причина: {2})."
@@ -267,6 +291,7 @@
 	{
 		"#format"		"{1:t},{2:d}"
 		"en"			"Issued an extended silence on {1} for {2} minutes."
+		"tr"			"{1} oyuncusuna {2} dakika boyunca susturulmuştur."
 		"hu"			"Elnémítva és eltíltva a chat-től {1} {2} perc."
 		"es"			"Ha silenciado extensivamente a {1} por {2} minutos."
 		"ru"			"Игроку {1} отключен чат и микрофон на {2} минут."
@@ -278,6 +303,7 @@
 	{
 		"#format"		"{1:t},{2:d},{3:s}"
 		"en"			"Issued an extended silence on {1} for {2} minutes (reason: {3})."
+		"tr"			"{1} oyuncusuna {2} dakika boyunca susturulmuştur. (neden: {3})."
 		"hu"			"Elnémítva és eltíltva a chat-től {1} {2} perc (ok: {3})."
 		"es"			"Ha silenciado extensivamente a {1} por {2} minutos (razón: {3})."
 		"ru"			"Игроку {1} отключен чат и микрофон на {2} минут (причина: {3})."
@@ -290,6 +316,7 @@
 	{
 		"#format"		"{1:t}"
 		"en"			"Temporarily removed mute from {1}."
+		"tr"			"{1} oyuncusunun konuşma yasaklaması kalıcı olarak kaldırılmıştır."
 		"hu"			"Ideiglenesen feloldva a némítás {1}."
 		"es"			"Ha eliminado el muteo temporal a {1}."
 		"ru"			"Игроку {1} временно включен микрофон."
@@ -301,6 +328,7 @@
 	{
 		"#format"		"{1:t}"
 		"en"			"Temporarily removed gag from {1}."
+		"tr"			"{1} oyuncusunun yazı yazma yasaklaması kalıcı olarak kaldırılmıştır."
 		"hu"			"Ideiglenesen feloldva az írás jogtól való eltíltás {1}."
 		"es"			"Ha eliminado el gageo temporal a {1}."
 		"ru"			"Игроку {1} временно включен чат."
@@ -312,6 +340,7 @@
 	{
 		"#format"		"{1:t}"
 		"en"			"Temporarily removed silence from {1}."
+		"tr"			"{1} oyuncusunun susturulması kalıcı olarak kaldırılmıştır."
 		"hu"			"Ideiglenesen feloldva az elnémítás és az írás jogtól való eltíltás {1}."
 		"es"			"Ha eliminado el silencio temporal a {1}."
 		"ru"			"Игроку {1} временно включен чат и микрофон."
@@ -323,6 +352,7 @@
 	{
 		"#format"		"{1:s}"
 		"en"			"An error occurred while requesting blocks for {1} from DB."
+		"tr"			"Veritabanından {1} için engel istenirken bir hata gerçekleşti."
 		"hu"			"Hiba történt {1} az adatbázisban."
 		"es"			"Ha ocurrido un error durante la solicitud de los bloqueos de {1} en la Base de Datos"
 		"ru"			"Произошла ошибка при запросе блокировок для {1} из базы."
@@ -334,6 +364,7 @@
 	{
 		"#format"		"{1:s}"
 		"en"			"No active blocks found in DB for {1}."
+		"tr"			"{1} için veritabanında hiç aktif engel bulunamadı."
 		"hu"			"Nem található tiltás az adatbázisban róla {1}."
 		"es"			"No hay bloqueos activos que se encuentren en la Base de Datos para {1}."
 		"ru"			"В базе не найдено действующих блокировок для {1}."
@@ -344,6 +375,7 @@
 	"No db error unlock perm"
 	{
 		"en"			"You lack the permission to unblocking with DB errors."
+		"tr"			"Veritabanı hatalarıyla birlikte engel kaldırmaya yetkiniz yok."
 		"hu"			"Nincs engedélyed feloldani az adatbázis hibát."
 		"es"			"No tienes permisos para desbloquear errores de la Base de Datos."
 		"ru"			"У вас нет разрешения на разблокировку при ошибках базы."
@@ -355,6 +387,7 @@
 	{
 		"#format"		"{1:s}"
 		"en"			"The mute on {1} was unable to be removed due to being muted by a higher administrator!"
+		"tr"			"{1} in konuşma yasaklanması daha yetkili biri tarafından atıldığından kaldırılamadı!" 
 		"hu"			"A némítás {1} nem lehet eltávolítani mivel egy magasabb rangú admin adta!"
 		"es"			"El muteo de {1} no pudo ser eliminado debido a que fue muteado por un administrador superior a ti!"
 		"ru"			"Невозможно включить микрофон {1}, т.к. он был отключен более высоким администратором!"
@@ -366,6 +399,7 @@
 	{
 		"#format"		"{1:s}"
 		"en"			"The gag on {1} was unable to be removed due to being muted by a higher administrator!"
+		"tr"			"{1} 'in yazı yazma yasaklanması daha yetkili biri tarafından atıldığından kaldırılamadı."
 		"hu"			"Az írástól való eltíltást {1} nem lehet eltávolítani mivel egy magasabb rangú admin adta!"
 		"es"			"El gageo de {1} no pudo ser eliminado debido a que fue gageado por un administrador superior a ti!"
 		"ru"			"Невозможно включить чат {1}, т.к. он был отключен более высоким администратором!"
@@ -377,6 +411,7 @@
 	{
 		"#format"		"{1:t}"
 		"en"			"Removed an extended mute from {1}."
+		"tr"			"{1} 'in süresi uzatılmış konuşma yasaklaması kaldırıldı."
 		"hu"			"Eltávolítva a némítás {1}."
 		"es"			"Ha eliminado el muteo extendido a {1}."
 		"ru"			"Игроку {1} включен микрофон."
@@ -388,6 +423,7 @@
 	{
 		"#format"		"{1:t}"
 		"en"			"Removed an extended gag from {1}."
+		"tr"			"{1} 'in süresi uzatılmış yazı yazma yasaklaması kaldırıldı."
 		"hu"			"Eltávolítva az írástól való eltíltás {1}."
 		"es"			"Ha eliminado el gageo extendido a {1}."
 		"ru"			"Игроку {1} включен чат."
@@ -398,6 +434,7 @@
 	"Unblock insert failed"
 	{
 		"en"			"Failed to remove block from DB."
+		"tr"			"Veritabanından engel kaldırma başarısız oldu."
 		"hu"			"Sikertelen eltávolítás az adatbázisból."
 		"es"			"Error al eliminar este bloqueo de la Base de Datos."
 		"ru"			"Не удалось удалить блокировку из базы."
@@ -409,6 +446,7 @@
 	{
 		"#format"		"{1:s}"
 		"en"			"Successfully removed mute for {1} from DB."
+		"tr"			"{1} in konuşma yasaklaması veritabanından başarılı bir şekilde kaldırıldı."
 		"hu"			"Sikeresen törölve a némítás {1}-ről az adatbázisból."
 		"es"			"Eliminado con éxito el muteo de {1} desde la Base de Datos."
 		"ru"			"Успешно удалена блокировка микрофона для {1} из базы."
@@ -420,6 +458,7 @@
 	{
 		"#format"		"{1:s}"
 		"en"			"Successfully removed gag for {1} from DB."
+		"tr"			"{1} in yazı yazma yasaklaması veritabanından başarılı bir şekilde kaldırıldı."
 		"hu"			"Sikeresen törölve az írástól való eltíltás {1}-ről az adatbázisból."
 		"es"			"Eliminado con éxito el gageo de {1} desde la Base de Datos."
 		"ru"			"Успешно удалена блокировка чата для {1} из базы."
@@ -432,6 +471,7 @@
 	{
 		"#format"	"{1:s}"
 		"en"		"[  ] {1}"
+		"tr"		"[  ] {1}"
 		"hu"		"[  ] {1}"
 		"es"		"[  ] {1}"
 		"ru"		"[  ] {1}"
@@ -443,6 +483,7 @@
 	{
 		"#format"	"{1:s}"
 		"en"		"[M] {1}"
+		"tr" 		"[M] {1}"
 		"hu"		"[M] {1}"
 		"es"		"[M] {1}"
 		"ru"		"[M] {1}"
@@ -454,6 +495,7 @@
 	{
 		"#format"	"{1:s}"
 		"en"		"[G] {1}"
+		"tr"		"[G] {1}"
 		"hu"		"[G] {1}"
 		"es"		"[G] {1}"
 		"ru"		"[G] {1}"
@@ -465,6 +507,7 @@
 	{
 		"#format"	"{1:s}"
 		"en"		"[S] {1}"
+		"tr"		"[S] {1}"
 		"hu"		"[S] {1}"
 		"es"		"[S] {1}"
 		"ru"		"[S] {1}"
@@ -475,6 +518,7 @@
 	"AdminMenu_Main"
 	{
 		"en"		"Comm Commands"
+		"tr"		"İletişim Komutları"
 		"hu"		"Kommunikációs parancsok"
 		"es"		"Comandos de Comunicación"
 		"ru"		"Чат и микрофон"
@@ -485,6 +529,7 @@
 	"AdminMenu_Select_Main"
 	{
 		"en"		"Comm Commands:"
+		"tr"		"İletişim Komutları:"
 		"hu"		"Kommunikációs parancsok:"
 		"es"		"Comandos de Comunicación:"
 		"ru"		"Чат и микрофон:"
@@ -495,6 +540,7 @@
 	"AdminMenu_List"
 	{
 		"en"		"View Punishments"
+		"tr"		"Cezaları göster"
 		"hu"		"Részletek a büntetésről"
 		"es"		"Ver Castigos"
 		"ru"		"Посмотреть наказания"
@@ -505,6 +551,7 @@
 	"AdminMenu_Select_List"
 	{
 		"en"		"Select Player:"
+		"tr"		"Oyuncu Seç:"
 		"hu"		"Játékos kiválasztása:"
 		"es"		"Seleccionar Jugador:"
 		"ru"		"Игроки:"
